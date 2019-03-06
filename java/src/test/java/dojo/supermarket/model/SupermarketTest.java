@@ -55,32 +55,32 @@ public class SupermarketTest {
         Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
     }
 
-    @Test
-    public void bundle_one_toothbrush_one_toothpaste() {
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothpaste);
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
-    }
-
-    @Test
-    public void discount_only_for_the_bundle() {
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothpaste);
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
-    }
-
-    @Test
-    public void two_bundles() {
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothpaste);
-        theCart.addItem(toothpaste);
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
-    }
+//    @Test
+//    public void bundle_one_toothbrush_one_toothpaste() {
+//        theCart.addItem(toothbrush);
+//        theCart.addItem(toothpaste);
+//        Receipt receipt = teller.checksOutArticlesFrom(theCart);
+//        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+//    }
+//
+//    @Test
+//    public void discount_only_for_the_bundle() {
+//        theCart.addItem(toothbrush);
+//        theCart.addItem(toothbrush);
+//        theCart.addItem(toothpaste);
+//        Receipt receipt = teller.checksOutArticlesFrom(theCart);
+//        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+//    }
+//
+//    @Test
+//    public void two_bundles() {
+//        theCart.addItem(toothbrush);
+//        theCart.addItem(toothbrush);
+//        theCart.addItem(toothpaste);
+//        theCart.addItem(toothpaste);
+//        Receipt receipt = teller.checksOutArticlesFrom(theCart);
+//        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+//    }
 
     @Test
     public void buy_two_get_one_free() {
