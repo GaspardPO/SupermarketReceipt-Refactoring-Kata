@@ -35,32 +35,23 @@ class ShoppingCart {
                 val quantityAsInt = quantityAsDouble.toInt()
 
                 var discount: Discount? = null
-                var nbOfSimilarProductsInAPack = 1
-                if (offer.offerType === SpecialOfferType.ThreeForTwo) {
-                    nbOfSimilarProductsInAPack = 3
-                } else if (offer.offerType === SpecialOfferType.TwoForAmount) {
-                    nbOfSimilarProductsInAPack = 2
-                }
-                if (offer.offerType === SpecialOfferType.FiveForAmount) {
-                    nbOfSimilarProductsInAPack = 5
-                }
 
-                val numberOfPacks = quantityAsInt / nbOfSimilarProductsInAPack
-                if(offer.offerType === SpecialOfferType.TwoForAmount && quantityAsInt >= 2){
+                val numberOfPacks = quantityAsInt / offer.offerType.getNbOfSimilarProductsInAPack
+                if(offer.offerType === SpecialOfferType.TwoForAmount && quantityAsInt >= offer.offerType.getNbOfSimilarProductsInAPack){
                     val total = offer.argument * numberOfPacks + quantityAsInt % 2 * unitPrice
                     val discountN = unitPrice * quantityAsDouble - total
                     discount = Discount(product_type, "2 for " + offer.argument, discountN)
                 }
-                if (offer.offerType === SpecialOfferType.ThreeForTwo && quantityAsInt > 2) {
+                if (offer.offerType === SpecialOfferType.ThreeForTwo && quantityAsInt >= offer.offerType.getNbOfSimilarProductsInAPack) {
                     val discountAmount = quantityAsDouble * unitPrice - (numberOfPacks.toDouble() * 2.0 * unitPrice + quantityAsInt % 3 * unitPrice)
                     discount = Discount(product_type, "3 for 2", discountAmount)
                 }
-                if (offer.offerType === SpecialOfferType.TenPercentDiscount) {
+                if (offer.offerType === SpecialOfferType.TenPercentDiscount && quantityAsInt >= offer.offerType.getNbOfSimilarProductsInAPack) {
                     discount = Discount(product_type, offer.argument.toString() + "% off", quantityAsDouble * unitPrice * offer.argument / 100.0)
                 }
-                if (offer.offerType === SpecialOfferType.FiveForAmount && quantityAsInt >= 5) {
+                if (offer.offerType === SpecialOfferType.FiveForAmount && quantityAsInt >= offer.offerType.getNbOfSimilarProductsInAPack) {
                     val discountTotal = unitPrice * quantityAsDouble - (offer.argument * numberOfPacks + quantityAsInt % 5 * unitPrice)
-                    discount = Discount(product_type, nbOfSimilarProductsInAPack.toString() + " for " + offer.argument, discountTotal)
+                    discount = Discount(product_type, offer.offerType.getNbOfSimilarProductsInAPack.toString() + " for " + offer.argument, discountTotal)
                 }
 
 
