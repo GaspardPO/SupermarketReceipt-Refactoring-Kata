@@ -13,6 +13,7 @@ public class SupermarketTest {
     private Product rice;
     private Product apples;
     private Product cherryTomatoes;
+    private Product toothpaste;
 
     @BeforeEach
     public void setUp() {
@@ -20,6 +21,8 @@ public class SupermarketTest {
         teller = new Teller(catalog);
         theCart = new ShoppingCart();
 
+        toothpaste = new Product("toothpaste", ProductUnit.Each);
+        catalog.addProduct(toothpaste, 1.79);
         toothbrush = new Product("toothbrush", ProductUnit.Each);
         catalog.addProduct(toothbrush, 0.99);
         rice = new Product("rice", ProductUnit.Each);
@@ -53,6 +56,33 @@ public class SupermarketTest {
     }
 
     @Test
+    public void bundle_one_toothbrush_one_toothpaste() {
+        theCart.addItem(toothbrush);
+        theCart.addItem(toothpaste);
+        Receipt receipt = teller.checksOutArticlesFrom(theCart);
+        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    }
+
+    @Test
+    public void discount_only_for_the_bundle() {
+        theCart.addItem(toothbrush);
+        theCart.addItem(toothbrush);
+        theCart.addItem(toothpaste);
+        Receipt receipt = teller.checksOutArticlesFrom(theCart);
+        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    }
+
+    @Test
+    public void two_bundles() {
+        theCart.addItem(toothbrush);
+        theCart.addItem(toothbrush);
+        theCart.addItem(toothpaste);
+        theCart.addItem(toothpaste);
+        Receipt receipt = teller.checksOutArticlesFrom(theCart);
+        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    }
+
+    @Test
     public void buy_two_get_one_free() {
         theCart.addItem(toothbrush);
         theCart.addItem(toothbrush);
@@ -73,6 +103,20 @@ public class SupermarketTest {
         Receipt receipt = teller.checksOutArticlesFrom(theCart);
         Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
     }
+
+    @Test
+    public void buy_six_get_one_free() {
+        theCart.addItem(toothbrush);
+        theCart.addItem(toothbrush);
+        theCart.addItem(toothbrush);
+        theCart.addItem(toothbrush);
+        theCart.addItem(toothbrush);
+        theCart.addItem(toothbrush);
+        teller.addSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush, catalog.getUnitPrice(toothbrush));
+        Receipt receipt = teller.checksOutArticlesFrom(theCart);
+        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    }
+
 
     @Test
     public void loose_weight_product() {
