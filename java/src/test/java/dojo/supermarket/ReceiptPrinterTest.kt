@@ -32,7 +32,7 @@ class ReceiptPrinterTest {
 
     @Test
     fun total() {
-        receipt.addProduct(toothbrush, 1.0, 0.99)
+        receipt.addProduct(toothbrush, 1.0, 1.98)
         receipt.addProduct(apples, 0.75, 1.99)
         Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }

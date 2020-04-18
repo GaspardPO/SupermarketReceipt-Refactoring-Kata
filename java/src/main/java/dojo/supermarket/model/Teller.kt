@@ -18,15 +18,13 @@ class Teller(private val catalog: SupermarketCatalog) {
             val unitPrice = this.catalog.getUnitPrice(p)
             receipt.addProduct(p, quantity, unitPrice)
         }
-        this.handleOffers(receipt, theCart.products_by_quantities )
+        this.handleOffers(receipt)
 
         return receipt
     }
 
-    fun handleOffers(receipt: Receipt, quantities_by_product: MutableMap<Product, Double>) {
-
-
-
+    fun handleOffers(receipt: Receipt) {
+        val quantities_by_product = receipt.getProductbyQuantities()
         for (product_type in quantities_by_product.keys) {
 
             val quantityAsDouble = quantities_by_product[product_type]!!

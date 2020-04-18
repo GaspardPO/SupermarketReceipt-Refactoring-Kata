@@ -33,4 +33,17 @@ class Receipt {
     fun getDiscounts(): List<Discount> {
         return discounts
     }
+
+    fun getProductbyQuantities() : Map<Product, Double>{
+        val laMap = HashMap<Product, Double>()
+        for (item in items) {
+            if (laMap.containsKey(item.product)) {
+                laMap[item.product] = laMap[item.product]!! + item.quantity
+            } else {
+                laMap[item.product] = item.quantity
+            }
+        }
+
+        return laMap
+    }
 }
