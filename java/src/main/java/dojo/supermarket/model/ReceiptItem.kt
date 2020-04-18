@@ -2,7 +2,9 @@ package dojo.supermarket.model
 
 import java.util.Objects
 
-class ReceiptItem(val product: Product, val quantity: Double, val price: Double, val totalPrice: Double) {
+class ReceiptItem(val product: Product, val quantity: Double, val price: Double) {
+
+    val totalPrice: Double = price * quantity
 
     override fun equals(o: Any?): Boolean {
         if (this === o) return true

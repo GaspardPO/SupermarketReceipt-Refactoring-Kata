@@ -18,8 +18,8 @@ class Receipt {
             return total
         }
 
-    fun addProduct(p: Product, quantity: Double, price: Double, totalPrice: Double) {
-        this.items.add(ReceiptItem(p, quantity, price, totalPrice))
+    fun addProduct(p: Product, quantity: Double, price: Double) {
+        this.items.add(ReceiptItem(p, quantity, price))
     }
 
     fun getItems(): List<ReceiptItem> {

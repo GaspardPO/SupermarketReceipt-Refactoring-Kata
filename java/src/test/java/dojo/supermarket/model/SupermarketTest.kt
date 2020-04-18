@@ -1,176 +1,172 @@
-package dojo.supermarket.model;
+package dojo.supermarket.model
 
-import dojo.supermarket.ReceiptPrinter;
-import org.approvaltests.Approvals;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import dojo.supermarket.ReceiptPrinter
+import org.approvaltests.Approvals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-public class SupermarketTest {
-    private SupermarketCatalog catalog;
-    private Teller teller;
-    private ShoppingCart theCart;
-    private Product toothbrush;
-    private Product rice;
-    private Product apples;
-    private Product cherryTomatoes;
-    private Product toothpaste;
+class SupermarketTest {
+    private var catalog: SupermarketCatalog = FakeCatalog()
+    private var teller: Teller? = null
+    private var theCart: ShoppingCart? = null
+    private var toothbrush: Product? = null
+    private var rice: Product? = null
+    private var apples: Product? = null
+    private var cherryTomatoes: Product? = null
+    private var toothpaste: Product? = null
 
     @BeforeEach
-    public void setUp() {
-        catalog = new FakeCatalog();
-        teller = new Teller(catalog);
-        theCart = new ShoppingCart();
-
-        toothpaste = new Product("toothpaste", ProductUnit.Each);
-        catalog.addProduct(toothpaste, 1.79);
-        toothbrush = new Product("toothbrush", ProductUnit.Each);
-        catalog.addProduct(toothbrush, 0.99);
-        rice = new Product("rice", ProductUnit.Each);
-        catalog.addProduct(rice, 2.99);
-        apples = new Product("apples", ProductUnit.Kilo);
-        catalog.addProduct(apples, 1.99);
-        cherryTomatoes = new Product("cherry tomato box", ProductUnit.Each);
-        catalog.addProduct(cherryTomatoes, 0.69);
-
+    fun setUp() {
+        teller = Teller(catalog)
+        theCart = ShoppingCart()
+        toothpaste = Product("toothpaste", ProductUnit.Each)
+        catalog.addProduct(toothpaste!!, 1.79)
+        toothbrush = Product("toothbrush", ProductUnit.Each)
+        catalog.addProduct(toothbrush!!, 0.99)
+        rice = Product("rice", ProductUnit.Each)
+        catalog.addProduct(rice!!, 2.99)
+        apples = Product("apples", ProductUnit.Kilo)
+        catalog.addProduct(apples!!, 1.99)
+        cherryTomatoes = Product("cherry tomato box", ProductUnit.Each)
+        catalog.addProduct(cherryTomatoes!!, 0.69)
     }
 
     @Test
-    public void an_empty_shopping_cart_should_cost_nothing() {
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    fun an_empty_shopping_cart_should_cost_nothing() {
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }
 
     @Test
-    public void one_normal_item() {
-        theCart.addItem(toothbrush);
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    fun one_normal_item() {
+        theCart!!.addItem(toothbrush!!)
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }
 
     @Test
-    public void two_normal_items() {
-        theCart.addItem(toothbrush);
-        theCart.addItem(rice);
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    fun two_normal_items() {
+        theCart!!.addItem(toothbrush!!)
+        theCart!!.addItem(rice!!)
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }
 
 //    @Test
-//    public void bundle_one_toothbrush_one_toothpaste() {
-//        theCart.addItem(toothbrush);
-//        theCart.addItem(toothpaste);
-//        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-//        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+//    fun bundle_one_toothbrush_one_toothpaste() {
+//        theCart!!.addItem(toothbrush!!)
+//        theCart!!.addItem(toothpaste!!)
+//        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+//        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
 //    }
 //
 //    @Test
-//    public void discount_only_for_the_bundle() {
-//        theCart.addItem(toothbrush);
-//        theCart.addItem(toothbrush);
-//        theCart.addItem(toothpaste);
-//        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-//        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+//    fun discount_only_for_the_bundle() {
+//        theCart!!.addItem(toothbrush!!)
+//        theCart!!.addItem(toothbrush!!)
+//        theCart!!.addItem(toothpaste!!)
+//        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+//        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
 //    }
 //
 //    @Test
-//    public void two_bundles() {
-//        theCart.addItem(toothbrush);
-//        theCart.addItem(toothbrush);
-//        theCart.addItem(toothpaste);
-//        theCart.addItem(toothpaste);
-//        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-//        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+//    fun two_bundles() {
+//        theCart!!.addItem(toothbrush!!)
+//        theCart!!.addItem(toothbrush!!)
+//        theCart!!.addItem(toothpaste!!)
+//        theCart!!.addItem(toothpaste!!)
+//        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+//        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
 //    }
 
     @Test
-    public void buy_two_get_one_free() {
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        teller.addSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush, catalog.getUnitPrice(toothbrush));
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    fun buy_two_get_one_free() {
+        theCart!!.addItem(toothbrush!!)
+        theCart!!.addItem(toothbrush!!)
+        theCart!!.addItem(toothbrush!!)
+        teller!!.addSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush!!, catalog!!.getUnitPrice(toothbrush!!))
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }
 
     @Test
-    public void buy_five_get_one_free() {
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        teller.addSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush, catalog.getUnitPrice(toothbrush));
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    fun buy_five_get_one_free() {
+        theCart!!.addItem(toothbrush!!)
+        theCart!!.addItem(toothbrush!!)
+        theCart!!.addItem(toothbrush!!)
+        theCart!!.addItem(toothbrush!!)
+        theCart!!.addItem(toothbrush!!)
+        teller!!.addSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush!!, catalog!!.getUnitPrice(toothbrush!!))
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }
 
     @Test
-    public void buy_six_get_one_free() {
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        theCart.addItem(toothbrush);
-        teller.addSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush, catalog.getUnitPrice(toothbrush));
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
-    }
-
-
-    @Test
-    public void loose_weight_product() {
-        theCart.addItemQuantity(apples, .5);
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    fun buy_six_get_one_free() {
+        theCart!!.addItem(toothbrush!!)
+        theCart!!.addItem(toothbrush!!)
+        theCart!!.addItem(toothbrush!!)
+        theCart!!.addItem(toothbrush!!)
+        theCart!!.addItem(toothbrush!!)
+        theCart!!.addItem(toothbrush!!)
+        teller!!.addSpecialOffer(SpecialOfferType.ThreeForTwo, toothbrush!!, catalog!!.getUnitPrice(toothbrush!!))
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }
 
     @Test
-    public void percent_discount() {
-        theCart.addItem(rice);
-        teller.addSpecialOffer(SpecialOfferType.TenPercentDiscount, rice, 10.0);
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    fun loose_weight_product() {
+        theCart!!.addItemQuantity(apples!!, .5)
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }
 
     @Test
-    public void xForY_discount() {
-        theCart.addItem(cherryTomatoes);
-        theCart.addItem(cherryTomatoes);
-        teller.addSpecialOffer(SpecialOfferType.TwoForAmount, cherryTomatoes,.99);
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    fun percent_discount() {
+        theCart!!.addItem(rice!!)
+        teller!!.addSpecialOffer(SpecialOfferType.TenPercentDiscount, rice!!, 10.0)
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }
 
     @Test
-    public void FiveForY_discount() {
-        theCart.addItemQuantity(apples, 5);
-        teller.addSpecialOffer(SpecialOfferType.FiveForAmount, apples,6.99);
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    fun xForY_discount() {
+        theCart!!.addItem(cherryTomatoes!!)
+        theCart!!.addItem(cherryTomatoes!!)
+        teller!!.addSpecialOffer(SpecialOfferType.TwoForAmount, cherryTomatoes!!, .99)
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }
 
     @Test
-    public void FiveForY_discount_withSix() {
-        theCart.addItemQuantity(apples, 6);
-        teller.addSpecialOffer(SpecialOfferType.FiveForAmount, apples,6.99);
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    fun FiveForY_discount() {
+        theCart!!.addItemQuantity(apples!!, 5.0)
+        teller!!.addSpecialOffer(SpecialOfferType.FiveForAmount, apples!!, 6.99)
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }
 
     @Test
-    public void FiveForY_discount_withSixteen() {
-        theCart.addItemQuantity(apples, 16);
-        teller.addSpecialOffer(SpecialOfferType.FiveForAmount, apples,6.99);
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    fun FiveForY_discount_withSix() {
+        theCart!!.addItemQuantity(apples!!, 6.0)
+        teller!!.addSpecialOffer(SpecialOfferType.FiveForAmount, apples!!, 6.99)
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }
 
     @Test
-    public void FiveForY_discount_withFour() {
-        theCart.addItemQuantity(apples, 4);
-        teller.addSpecialOffer(SpecialOfferType.FiveForAmount, apples,6.99);
-        Receipt receipt = teller.checksOutArticlesFrom(theCart);
-        Approvals.verify(new ReceiptPrinter(40).printReceipt(receipt));
+    fun FiveForY_discount_withSixteen() {
+        theCart!!.addItemQuantity(apples!!, 16.0)
+        teller!!.addSpecialOffer(SpecialOfferType.FiveForAmount, apples!!, 6.99)
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
+    }
+
+    @Test
+    fun FiveForY_discount_withFour() {
+        theCart!!.addItemQuantity(apples!!, 4.0)
+        teller!!.addSpecialOffer(SpecialOfferType.FiveForAmount, apples!!, 6.99)
+        val receipt = teller!!.checksOutArticlesFrom(theCart!!)
+        Approvals.verify(ReceiptPrinter(40).printReceipt(receipt))
     }
 }
